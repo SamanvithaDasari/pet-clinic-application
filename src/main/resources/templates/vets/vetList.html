@@ -2,18 +2,23 @@
 
 <html xmlns:th="https://www.thymeleaf.org"
       th:replace="~{fragments/layout :: layout (~{::body},'vets')}">
-
+<head>
+	<style>	table thead {
+	      background-color: #8B4513; /* Brown color */
+	      color: #FFFFFF; /* White text color for better contrast */
+	    }</style>
+</head>
 <body>
 
 <h2>Veterinarians</h2>
 
 <table id="vets" class="table table-striped">
-  <thead>
-  <tr>
-    <th>Name</th>
-    <th>Specialties</th>
-  </tr>
-  </thead>
+	<thead style="background-color: rgb(128, 64, 0); color: white;">
+	   <tr>
+	     <th style="color: white;">Name</th>
+	     <th style="color: white;">Specialties</th>
+	   </tr>
+	 </thead>
   <tbody>
   <tr th:each="vet : ${listVets}">
     <td th:text="${vet.firstName + ' ' + vet.lastName}"></td>

@@ -3,61 +3,82 @@
 <html xmlns:th="https://www.thymeleaf.org"
   th:replace="~{fragments/layout :: layout (~{::body},'owners')}">
 
-  <body>
-  
-  
-    <h2>Owner Information</h2>
+<head>
+  <style>
+    /* Set table header background to brown and text color to white */
+    th {
+      background-color: #8B4513; /* Brown color */
+      color: rgb(64, 0, 0); /* White text color */
+    }
+	
+	    /* Brown background for all thead elements */
+	    table thead {
+	      background-color: #8B4513; /* Brown color */
+	      color: #FFFFFF; /* White text color for better contrast */
+	    }
+	    
+	    /* Optional padding for table cells */
+	    th, td {
+	      padding: 8px;
+	    }
+	 
+  </style>
+</head>
 
-    <div th:if="${message}" class="alert alert-success" id="success-message">
-      <span th:text="${message}"></span>
-    </div>
+<body>
 
-    <div th:if="${error}" class="alert alert-danger" id="error-message">
-      <span th:text="${error}"></span>
-    </div>
+  <h2>Owner Information</h2>
 
+  <div th:if="${message}" class="alert alert-success" id="success-message">
+    <span th:text="${message}"></span>
+  </div>
 
+  <div th:if="${error}" class="alert alert-danger" id="error-message">
+    <span th:text="${error}"></span>
+  </div>
 
+  <table class="table table-striped" th:object="${owner}">
+    <tr>
+      <th>Name</th>
+      <td><b th:text="*{firstName + ' ' + lastName}"></b></td>
+    </tr>
+    <tr>
+      <th>Address</th>
+      <td th:text="*{address}"></td>
+    </tr>
+    <tr>
+      <th>City</th>
+      <td th:text="*{city}"></td>
+    </tr>
+    <tr>
+      <th>Telephone</th>
+      <td th:text="*{telephone}"></td>
+    </tr>
+  </table>
 
-    <table class="table table-striped" th:object="${owner}">
+  <a th:href="@{__${owner.id}__/edit}" class="btn btn-primary">Edit Owner</a>
+  <a th:href="@{__${owner.id}__/pets/new}" class="btn btn-primary">Add New Pet</a>
+
+  <br />
+  <br />
+  <br />
+  <h2>Pets and Visits</h2>
+
+  <table class="table table-striped">
+    <thead>
       <tr>
-        <th>Name</th>
-        <td><b th:text="*{firstName + ' ' + lastName}"></b></td>
+        <th>Visit Date</th>
+        <th>Description</th>
       </tr>
-      <tr>
-        <th>Address</th>
-        <td th:text="*{address}"></td>
-      </tr>
-      <tr>
-        <th>City</th>
-        <td th:text="*{city}"></td>
-      </tr>
-      <tr>
-        <th>Telephone</th>
-        <td th:text="*{telephone}"></td>
-      </tr>
-    </table>
-  
-    <a th:href="@{__${owner.id}__/edit}" class="btn btn-primary">Edit
-      Owner</a>
-    <a th:href="@{__${owner.id}__/pets/new}" class="btn btn-primary">Add
-      New Pet</a>
-  
-    <br />
-    <br />
-    <br />
-    <h2>Pets and Visits</h2>
-  
-    <table class="table table-striped">
-  
+    </thead>
+    <tbody>
       <tr th:each="pet : ${owner.pets}">
         <td valign="top">
           <dl class="dl-horizontal">
             <dt>Name</dt>
             <dd th:text="${pet.name}"></dd>
             <dt>Birth Date</dt>
-            <dd
-              th:text="${#temporals.format(pet.birthDate, 'yyyy-MM-dd')}"></dd>
+            <dd th:text="${#temporals.format(pet.birthDate, 'yyyy-MM-dd')}"></dd>
             <dt>Type</dt>
             <dd th:text="${pet.type}"></dd>
           </dl>
@@ -70,33 +91,35 @@
                 <th>Description</th>
               </tr>
             </thead>
-            <tr th:each="visit : ${pet.visits}">
-              <td th:text="${#temporals.format(visit.date, 'yyyy-MM-dd')}"></td>
-              <td th:text="${visit?.description}"></td>
-            </tr>
-            <tr>
-              <td><a th:href="@{__${owner.id}__/pets/__${pet.id}__/edit}">Edit Pet</a></td>
-              <td><a th:href="@{__${owner.id}__/pets/__${pet.id}__/visits/new}">Add Visit</a></td>
-            </tr>
+            <tbody>
+              <tr th:each="visit : ${pet.visits}">
+                <td th:text="${#temporals.format(visit.date, 'yyyy-MM-dd')}"></td>
+                <td th:text="${visit?.description}"></td>
+              </tr>
+              <tr>
+                <td><a th:href="@{__${owner.id}__/pets/__${pet.id}__/edit}">Edit Pet</a></td>
+                <td><a th:href="@{__${owner.id}__/pets/__${pet.id}__/visits/new}">Add Visit</a></td>
+              </tr>
+            </tbody>
           </table>
         </td>
       </tr>
-  
-    </table>
-    <script>
+    </tbody>
+  </table>
+
+  <script>
     // Function to hide the success and error messages after 3 seconds
     function hideMessages() {
-        setTimeout(function() {
-            document.getElementById("success-message").style.display = "none";
-            document.getElementById("error-message").style.display = "none";
-        }, 3000); // 3000 milliseconds (3 seconds)
+      setTimeout(function() {
+        document.getElementById("success-message").style.display = "none";
+        document.getElementById("error-message").style.display = "none";
+      }, 3000); // 3000 milliseconds (3 seconds)
     }
 
     // Call the function to hide messages
     hideMessages();
-</script>
+  </script>
 
-  </body>
-
+</body>
 
 </html>
